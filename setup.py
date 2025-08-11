@@ -2,15 +2,15 @@ from setuptools import setup, find_packages
 
 setup(
     name='nobitexv2',
-    version='0.1',
+    version='0.1.2',
     packages=find_packages(exclude=['tests']),
     install_requires=[
-        'requests>=2',      
+        'requests>=2',
     ],
     author='NavidP',
     author_email='navidpoladi99@example.com',
     description='Nobitex client for python',
-    long_description=open('README.md').read(),
+    long_description=open('README.md',encoding='utf-8').read(),
     long_description_content_type='text/markdown',
     url='https://github.com/navidpgg/nobitexv2',
     classifiers=[

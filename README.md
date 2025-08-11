@@ -7,6 +7,7 @@ pip install nobitexv2
 نمونه استفاده از nobitexv2. اسکریپتی که روزانه با استفاده از moving average سفارشتان market خرید و فروش میذارد.(بازار BTCUSDT)
 ```python
 import time
+import requests
 from datetime import datetime,timedelta
 from nobitexv2 import NobitexV2
 
@@ -58,7 +59,7 @@ while True:
     # iterate after a day
     time.sleep(timedelta(days=1).total_seconds())
 ```
-## implementation progress [nobitex docs](apidocs.nobitex.ir)
+## implementation progress [nobitex docs](https://apidocs.nobitex.ir/)
 مواردی که 🟩 گذاشته شده پیاده سازی شده اند. 🟧 ناقص. 🟥 پیاده سازی نشده
 |بخش|وضیعت|
 |---|---|
