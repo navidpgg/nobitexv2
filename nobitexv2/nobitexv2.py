@@ -118,7 +118,7 @@ class NobitexV2:
         return response.json()
     #endregion
     
-    #region user info
+    #region user info (uncompleted)
     def user_profile(self):
         """این api، اطلاعات پروفایل شما، کارت بانکی، حساب بانکی، موارد تایید شده(ایمیل، شماره تلفن، موبایل ...)، تنظمیات مربوط به پروفایل(فی تراکنش، فی مبادلات usdt و ...) و خلاصه آمار مبادلات شما را برمیگرداند.
         
@@ -176,6 +176,33 @@ class NobitexV2:
         url=_join_urls(self.base_url,'/v2/wallets')
         data=dict(currencies=currencies,type=type_)
         response=self.session.get(url,data=data)
+        response.raise_for_status()
+        return response.json()
+    
+    def add_card(self,
+                 number,
+                 bank):
+        """برای افزودن کارت بانکی جدید از این نوع درخواست استفاده نمایید:
+        
+        https://apidocs.nobitex.ir/#f9fd4e8e3a"""
+        url=_join_urls(self.base_url,'/users/cards-add')
+        data=dict(number=number,bank=bank)
+        data=_remove_nones_dict(data)
+        response=self.session.post(url,data=data)
+        response.raise_for_status()
+        return response.json()
+    
+    def add_account(self,
+                    number,
+                    shaba,
+                    bank):
+        """برای افزودن حساب بانکی جدید از این نوع درخواست استفاده نمایید:
+        
+        https://apidocs.nobitex.ir/#0f4b9b52e8"""
+        url=_join_urls(self.base_url,'/users/accounts-add')
+        data=dict(number=number,bank=bank,shaba=shaba)
+        data=_remove_nones_dict(data)
+        response=self.session.post(url,data=data)
         response.raise_for_status()
         return response.json()
     
@@ -289,6 +316,44 @@ class NobitexV2:
         return response.json()
     #endregion
 
+    #region margin trade (uncompleted)
+    def margin_markets_list(self):
+        """https://apidocs.nobitex.ir/#3f2eb2d88c"""
+        url=_join_urls(self.base_url,'/margin/markets/list')
+        response=self.session.post(url)
+        response.raise_for_status()
+        return response.json()
+    #endregion
+    
+    #region authentication
+    def auth_login(self,
+                   username,
+                   password,
+                   remember,
+                   captcha,
+                   totp_code=None):
+        """دریافت توکن به صورت خودکار و با ارسال درخواست به /auth/login/ صورت می‌گیرد. این تنها APIی است که نیاز دارید به آن نام کاربری و رمز عبور خود را ارسال کنید. تمامی دیگر APIها از توکن به جای رمز عبور برای احراز هویت استفاده می‌کنند. توکن‌های صادر شده بعد از چهار ساعت منقضی می‌شوند و باید مجددا با ارسال درخواست لاگین، توکن جدیدی دریافت کنید. در صورتی که نیاز به ایجاد توکن‌های بلند مدت دارید، از پارامتر remember=yes استفاده کنید تا توکن ایجاد شده به مدت سی روز معتبر بماند. توجه داشته باشید، در صورتی که احراز هویت دو مرحله‌ای را فعال کرده باشید، می بایست رمز یک‌بار مصرف را نیز ارسال نمایید. توضیحات دقیق‌تر را از اینجا مطالعه فرمایید.
+        
+        DOES NOT REQUIRE TOKEN
+        
+        https://apidocs.nobitex.ir/#login"""
+        url=_join_urls(self.base_url,'/auth/login/')
+        data=dict(username=username,password=password,remember=remember,captcha=captcha)
+        data=_remove_nones_dict(data)
+        response=self.session.post(url,data=data,headers={'X-TOTP':totp_code})
+        response.raise_for_status()
+        return response.json()
+    
+    def auth_logout(self):
+        """خروج - سوزاندن توکن
+        
+        https://apidocs.nobitex.ir/#logout"""
+        url=_join_urls(self.base_url,'/auth/logout/')
+        response=self.session.post(url) # all it needs is the token which is included
+        response.raise_for_status()
+        return response.json()
+    #endregion
+    
 if __name__=="__main__":
     # exmaple usage
     
